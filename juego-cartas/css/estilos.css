@@ -1,5 +1,32 @@
 /*https://www.youtube.com/watch?v=h3l4qz76JhQ */
 
+/* LINEAS NUEVAS... Yo odio crear estilos por lo que no sabes cuanto subri por ello ;P... como sea tu decides donde organizar estas lineas [by Hakyn Seyer]... [!] Importante: No me hago responsable si hay conflictos con las clases, en dado caso rendir cuentas con mi jefe y dios <br> */
+
+.marcoCargandoHS {
+	z-index: 10;
+	overflow: hidden;
+}
+
+.marcoDelJuegoHS {
+	overflow: hidden;
+}
+
+.cargandoHS {
+	z-index: 10;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	background-color: black;
+	color: white;
+}
+
+/* FIN DE LINEAS NUEVAS [ by Hakyn Seyer]... Una oración para nuestro dios creador <br> */
+
 /*CARGANDO*/
 #cargando {
 	background-image: url("../img/bright-squares.png");
