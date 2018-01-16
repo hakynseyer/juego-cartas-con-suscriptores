@@ -64,8 +64,8 @@
 
 /*CARGANDO*/
 #cargando {
-	/* background-image: url("../img/bright-squares.png"); */
-	/* background-repeat: repeat; */
+	background-image: url("../img/bright-squares.png");
+	background-repeat: repeat;
 }
 
 #carga-spinner {

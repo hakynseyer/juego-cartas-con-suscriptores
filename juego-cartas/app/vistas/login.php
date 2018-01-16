@@ -6,7 +6,7 @@
             <br>
             <h1>Login</h1>
             <br>
-            <form class="form-signin" id="formLogin">
+            <form class="form-signin" id="formLogin" autocomplete="off">
                 <label for="inputEmail" class="sr-only">Email address</label>
                 <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Pon tu tomato" required autofocus>
                 <br>

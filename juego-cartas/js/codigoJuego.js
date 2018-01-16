@@ -7,7 +7,7 @@ class enrutadorSPA {
         this.herramientaJD1 = new herramientasJD1()
     }
 
-    cargarVista (vista) {
+    cargarVista (vista, informacion) {
         switch (vista) {
             case 'cargando':
                 return this.buscarVista(vista).then(() => {
@@ -21,7 +21,11 @@ class enrutadorSPA {
                 this.cargarVista('cargando').then(() => {
                     this.buscarVista(vista).then(() => {
                         setTimeout(() => {
-                            $("#carga-texto").html("<h2> Iniciando Juego </h2>");
+                            if (typeof (informacion) !== 'undefiend')
+                            $("#carga-texto").html(`<div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+                            <h2> Bienvenido </h2>
+                            <h2> "${informacion.toUpperCase()}" </h2>
+                            </div>`);
                             this.destruccionVistas('cargando', 'destruirArriba')
                         }, tiempoEspera)
                     })
@@ -124,7 +128,7 @@ class enrutadorSPA {
             if (typeof (animacionDestructiva) !== 'undefined') {
                 switch (animacionDestructiva) {
                     case 'destruirArriba':
-                        $(`#${vista}`).animate({'top': '-100%'}, 2000, () => {
+                        $(`#${vista}`).animate({'top': '-100%'}, 2100, () => {
                             $(`#${vista}`).remove()
                             resolve()
                         })
@@ -220,7 +224,7 @@ class formularios {
 
         ajaxFormulario.defaultAjax(formData, respuesta => {
             if (respuesta) {
-                this.herramientaJD1.entradasVistas({id: 'registro-correcto'}, 'normal', 'formRegistro')
+                this.herramientaJD1.entradasElementos({id: 'registro-correcto'}, 'normal', 'formRegistro')
             }
         })
     }
@@ -238,7 +242,7 @@ class formularios {
 
         ajaxFormulario.defaultAjax(formData, respuesta => {
             if (respuesta.respuesta) {
-                enrutadorHS.cargarVista('tablero')
+                enrutadorHS.cargarVista('tablero', respuesta.usuario)
             } else if (!respuesta.respuesta) {
                 this.herramientaJD1.entradasElementos({id: 'errorFormulario', inyectar: {id: 'spanFormularioError', mensaje: respuesta.mensaje}}, 'normal')
             }
