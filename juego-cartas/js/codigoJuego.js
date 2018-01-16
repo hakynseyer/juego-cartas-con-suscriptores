@@ -12,6 +12,7 @@ class enrutadorSPA {
             case 'cargando':
                 return this.buscarVista(vista).then(() => {
                     this.generadorCargando(true, true)
+                    this.agregandoVistas(vista, {tipo: 'personalizado', clase: 'cargandoHS-entrada'})
                 })
                 break
             case 'tablero':
@@ -105,6 +106,19 @@ class enrutadorSPA {
         }
     }
 
+    agregandoVistas (vista, animacionEntrada) {
+        return new Promise (resolve => {
+            if (typeof (animacionEntrada) === 'object') {
+                switch (animacionEntrada.tipo) {
+                    case 'personalizado':
+                        $(`#${vista}`).addClass(animacionEntrada.clase)
+                        resolve()
+                        break
+                }
+            } else console.error('Te has olvidado de agregar la animacion para la entrada... Si te desconcentras nunca terminaremos')
+        })
+    }
+
     destruccionVistas (vista, animacionDestructiva) {
         return new Promise (resolve => {
             if (typeof (animacionDestructiva) !== 'undefined') {
@@ -126,6 +140,50 @@ class enrutadorSPA {
 class herramientasJD1 {
     numeroAleatorio (minimo, maximo) {
         return Math.floor((Math.random() * maximo) + minimo);
+    }
+
+    entradasElementos (elemento, animacionEntrada, reemplazo) {
+        return new Promise (resolve => {
+            if (typeof (animacionEntrada) !== 'undefined' && typeof (elemento) === 'object') {
+                switch (animacionEntrada) {
+                    case 'normal':
+                        $(`#${elemento.id}`).css('display', 'inline-block')
+                        
+                        if (typeof (elemento.inyectar) === 'object') {
+                            $(`#${elemento.inyectar.id}`).html(elemento.inyectar.mensaje)
+                        }
+
+                        if (typeof (reemplazo) !== 'undefined') {
+                            $(`#${reemplazo}`).animate({'opacity': 0}, 500, () => {
+                                $(`#${reemplazo}`).css('display', 'none')
+                                $(`#${elemento.id}`).animate({'opacity': 1}, 1000)
+                            })
+                        } else $(`#${elemento.id}`).animate({'opacity': 1}, 1000)
+
+                        resolve()
+                        break
+                }
+            }
+        })
+    }
+
+    salidasElementos (elemento, animacionSalida) {
+        return new Promise (resolve => {
+            if (typeof (animacionSalida) !== 'undefined') {
+                switch (animacionSalida) {
+                    case 'normal':
+                        $(`#${elemento}`).animate({'opacity': 0}, 500, () => {
+                            $(`#${elemento}`).css('display', 'none')
+                        })
+                        resolve()
+                        break
+                    case 'opacidadDirecta':
+                        $(`#${elemento}`).css('opacity', 0)
+                        resolve()
+                        break
+                }
+            }
+        })
     }
 }
 
@@ -155,11 +213,35 @@ class ajaxDatos {
 class formularios {
     registro () {
         const ajaxFormulario = new ajaxDatos('registro')
+
+        this.herramientaJD1 = new herramientasJD1()
         
         let formData = new FormData($('#form-registro')[0]);
 
         ajaxFormulario.defaultAjax(formData, respuesta => {
-            console.log(respuesta)
+            if (respuesta) {
+                this.herramientaJD1.entradasVistas({id: 'registro-correcto'}, 'normal', 'formRegistro')
+            }
+        })
+    }
+    login () {
+        this.herramientaJD1 = new herramientasJD1()
+
+        if ($('#errorFormulario').find('span').text().length) {
+            this.herramientaJD1.salidasElementos('errorFormulario', 'opacidadDirecta')
+        }
+
+        const ajaxFormulario = new ajaxDatos('login')
+        
+
+        let formData = new FormData($('#formLogin')[0])
+
+        ajaxFormulario.defaultAjax(formData, respuesta => {
+            if (respuesta.respuesta) {
+                enrutadorHS.cargarVista('tablero')
+            } else if (!respuesta.respuesta) {
+                this.herramientaJD1.entradasElementos({id: 'errorFormulario', inyectar: {id: 'spanFormularioError', mensaje: respuesta.mensaje}}, 'normal')
+            }
         })
     }
 }

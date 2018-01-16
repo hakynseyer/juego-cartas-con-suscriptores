@@ -20,7 +20,7 @@ if (!isset($conexion)) {
 		$conexion -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$conexion -> exec("SET CHARACTER SET utf8");
 		
-		$sql = "INSERT INTO usuarios(nombre, email, password, fecha_registro, activo) VALUES(:nombre, :email, :password, NOW(), 0)";
+		$sql = "INSERT INTO usuarios(nombre, email, password, fecha_registro, activo) VALUES(:nombre, :email, :password, NOW(), 1)";
 		
 		$sentencia = $conexion -> prepare($sql);
                 
